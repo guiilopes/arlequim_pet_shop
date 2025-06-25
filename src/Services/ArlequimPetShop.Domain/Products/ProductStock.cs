@@ -22,25 +22,40 @@ namespace ArlequimPetShop.Domain.Products
 
         public int Id { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Nome do produto obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Quantidade do produto obrigatória.")]
         public decimal? Quantity { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de criação do produto obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de criação do produto obrigatória.")]
         public virtual DateTime CreatedOn { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de atualização do produto obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de atualização do produto obrigatória.")]
         public virtual DateTime UpdatedOn { get; set; }
 
         public virtual DateTime? DeletedOn { get; set; }
 
         public virtual Product Product { get; set; }
 
-        public void Update(decimal? quantity, bool? incress = false)
+        public void Add(decimal? quantity)
         {
-            if (!incress.HasValue)
-                Quantity = quantity;
-            else
-                Quantity += quantity ?? 0M;
+            Quantity += quantity;
+
+            UpdatedOn = DateTime.Now;
+
+            this.Validate();
+        }
+
+        public void Update(decimal? quantity)
+        {
+            Quantity = quantity;
+
+            UpdatedOn = DateTime.Now;
+
+            this.Validate();
+        }
+
+        public void Remove(decimal? quantity)
+        {
+            Quantity -= quantity;
 
             UpdatedOn = DateTime.Now;
 

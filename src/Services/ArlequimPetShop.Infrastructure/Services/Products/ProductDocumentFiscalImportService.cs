@@ -38,7 +38,7 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
                 }
 
                 product.AddHistory(item.Prod.Name, item.Prod.Name, quantity, documentFiscalNumber);
-                product.AddStock(quantity, true);
+                product.AddStock(quantity);
 
                 await _productRepository.UpdateAsync(product);
             }

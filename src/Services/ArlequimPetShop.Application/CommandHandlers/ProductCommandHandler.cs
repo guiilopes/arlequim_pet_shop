@@ -59,7 +59,7 @@ namespace ArlequimPetShop.Application.CommandHandlers
 
             var product = new Product(Guid.NewGuid(), command.Barcode, command.Name, command.Description, command.Price, command.ExpirationDate);
 
-            product.AddStock();
+            product.UpdateStock();
 
             await _productRepository.AddAsync(product);
 

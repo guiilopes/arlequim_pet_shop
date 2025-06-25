@@ -49,7 +49,7 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
                     }
 
                     product.AddHistory(item.Name, item.Description, item.Quantity, documentFiscalNumber);
-                    product.AddStock(quantity);
+                    product.UpdateStock(quantity);
 
                     await _productRepository.UpdateAsync(product);
                 }

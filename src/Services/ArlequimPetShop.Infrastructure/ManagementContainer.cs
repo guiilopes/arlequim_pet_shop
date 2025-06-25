@@ -1,10 +1,13 @@
 ﻿using ArlequimPetShop.Application.CommandHandlers;
 using ArlequimPetShop.Application.QueryHandlers;
 using ArlequimPetShop.Contracts.Commands.Products;
+using ArlequimPetShop.Contracts.Commands.Sales;
 using ArlequimPetShop.Contracts.Commands.Users;
 using ArlequimPetShop.Contracts.Queries.Products;
 using ArlequimPetShop.Contracts.Queries.Users;
+using ArlequimPetShop.Domain.Clients.Services;
 using ArlequimPetShop.Domain.Products.Services;
+using ArlequimPetShop.Domain.Sales.Services;
 using ArlequimPetShop.Domain.Users.Services;
 using ArlequimPetShop.Infrastructure.Databases.Mappings;
 using ArlequimPetShop.Infrastructure.Databases.Repositories;
@@ -14,7 +17,6 @@ using ArlequimPetShop.SharedKernel.Options;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
@@ -67,7 +69,9 @@ namespace ArlequimPetShop.Infrastructure
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddSingleton<IClientRepository, ClientNHRpository>();
             services.AddSingleton<IProductRepository, ProductNHRpository>();
+            services.AddSingleton<ISaleRepository, SaleNHRpository>();
             services.AddSingleton<IUserRepository, UserNHRpository>();
         }
 
@@ -103,6 +107,7 @@ namespace ArlequimPetShop.Infrastructure
         private static void RegisterCommands(IServiceCollection services)
         {
             services.AddSingleton<ProductCommandHandler>();
+            services.AddSingleton<SaleCommandHandler>();
             services.AddSingleton<UserCommandHandler>();
 
             services.AddSingleton<ICommandBus>(a =>
@@ -116,6 +121,9 @@ namespace ArlequimPetShop.Infrastructure
                 commandBus.Register<ProductStockInventoryCommand>(productHandler);
                 commandBus.Register<ProductDocumentFiscalImportCommand>(productHandler);
 
+                var saleHandler = a.GetService<SaleCommandHandler>();
+                commandBus.Register<SaleCreateCommand>(saleHandler);
+
                 var userHandler = a.GetService<UserCommandHandler>();
                 commandBus.Register<UserCreateCommand>(userHandler);
                 commandBus.Register<UserLoginCommand>(userHandler);
@@ -126,7 +134,7 @@ namespace ArlequimPetShop.Infrastructure
 
         private static void RegisterEvents(IServiceCollection services)
         {
-            
+
         }
 
         private static ISessionFactory CreateNHFactory(IConfiguration configuration, string connectionStringName)

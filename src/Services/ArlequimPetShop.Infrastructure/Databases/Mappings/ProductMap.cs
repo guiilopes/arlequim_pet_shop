@@ -16,8 +16,8 @@ namespace ArlequimPetShop.Infrastructure.Databases.Mappings
             Map(m => m.Price).Not.Nullable();
             Map(m => m.ExpirationDate).Nullable();
 
-            Map(m => m.CreatedOn).Nullable();
-            Map(m => m.UpdatedOn).Nullable();
+            Map(m => m.CreatedOn).Not.Nullable();
+            Map(m => m.UpdatedOn).Not.Nullable();
             Map(m => m.DeletedOn).Nullable();
 
             HasMany(m => m.Stocks).KeyColumn("ProductId").ExtraLazyLoad().AsBag().BatchSize(16).Inverse().Cascade.AllDeleteOrphan().Where(" DeletedOn IS NULL ");

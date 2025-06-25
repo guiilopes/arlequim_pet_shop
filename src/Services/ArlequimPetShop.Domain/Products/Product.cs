@@ -43,10 +43,10 @@ namespace ArlequimPetShop.Domain.Products
 
         public DateTime? ExpirationDate { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de criação do produto obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de criação do produto obrigatória.")]
         public virtual DateTime CreatedOn { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de atualização do produto obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de atualização do produto obrigatória.")]
         public virtual DateTime UpdatedOn { get; set; }
 
         public virtual DateTime? DeletedOn { get; set; }
@@ -55,7 +55,12 @@ namespace ArlequimPetShop.Domain.Products
 
         public virtual IList<ProductHistory> Histories { get; set; }
 
-        public void AddStock(decimal? quantity = 0M, bool? incress = false)
+        public bool HasSufficientStock(decimal? quantity)
+        {
+            return Stocks.FirstOrDefault().Quantity < quantity;
+        }
+
+        public void AddStock(decimal? quantity = 0M)
         {
             var stock = Stocks.Where(s => s.Product == this)
                               .FirstOrDefault();
@@ -63,7 +68,7 @@ namespace ArlequimPetShop.Domain.Products
             if (stock == null)
                 Stocks.Add(new ProductStock(this, quantity));
             else
-                stock.Update(quantity, incress);
+                stock.Add(quantity);
 
             UpdatedOn = DateTime.Now;
         }
@@ -81,6 +86,28 @@ namespace ArlequimPetShop.Domain.Products
             var entity = new ProductHistory(this, message.ToString(), quantity, documentNumber);
 
             Histories.Add(entity);
+
+            UpdatedOn = DateTime.Now;
+        }
+
+        public void UpdateStock(decimal? quantity = 0M)
+        {
+            var stock = Stocks.Where(s => s.Product == this)
+                              .FirstOrDefault();
+
+            if (stock == null)
+                Stocks.Add(new ProductStock(this, quantity));
+            else
+                stock.Update(quantity);
+
+            UpdatedOn = DateTime.Now;
+        }
+
+        public void RemoveStock(decimal? quantity)
+        {
+            var stock = Stocks.FirstOrDefault();
+
+            stock?.Remove(quantity);
 
             UpdatedOn = DateTime.Now;
         }

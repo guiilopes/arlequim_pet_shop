@@ -60,10 +60,10 @@ namespace ArlequimPetShop.Domain.Users
             }
         }
 
-        [RequiredValidator(ErrorMessage = "Data de criação do usuário obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de criação do usuário obrigatória.")]
         public virtual DateTime CreatedOn { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de atualização do usuário obrigatório.")]
+        [RequiredValidator(ErrorMessage = "Data de atualização do usuário obrigatória.")]
         public virtual DateTime UpdatedOn { get; set; }
 
         public virtual DateTime? DeletedOn { get; set; }
@@ -90,7 +90,7 @@ namespace ArlequimPetShop.Domain.Users
             var claims = new[]
             {
                 new Claim("name", email),
-                new Claim("role", Util.EnumDescription(Type)),
+                new Claim("role", Text.EnumDescription(Type)),
                 new Claim("userId", Id.ToString()),
             };
 
