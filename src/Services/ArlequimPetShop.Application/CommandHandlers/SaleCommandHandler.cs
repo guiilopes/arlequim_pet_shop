@@ -57,7 +57,8 @@ namespace ArlequimPetShop.Application.CommandHandlers
             foreach (var item in command.Products)
             {
                 var product = await _productRepository.GetAsyncByBarcode(item.Barcode);
-                var priceWithDiscount = product.Price * (1 - item.Discount);
+                var netPrice = product.Price * (1M - item.Discount / 100M);
+                var priceWithDiscount = Convert.ToDecimal(Excel.Truncate(netPrice ?? 0M, 2));
 
                 Throw.IsTrue(product.HasSufficientStock(item.Quantity), "Product.Stock", $"Não há quantidade suficiente do produto; Código de barra: {product.Barcode} - Nome: {product.Name}.");
 

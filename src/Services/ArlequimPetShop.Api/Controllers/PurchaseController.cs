@@ -1,9 +1,4 @@
 using ArlequimPetShop.Contracts.Commands.Products;
-using ArlequimPetShop.Contracts.Commands.Users;
-using ArlequimPetShop.Contracts.Queries.Products;
-using ArlequimPetShop.Contracts.Queries.Users;
-using ArlequimPetShop.SharedKernel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SrShut.Common;
 using SrShut.Cqrs.Commands;

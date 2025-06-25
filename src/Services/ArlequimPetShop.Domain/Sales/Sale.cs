@@ -16,6 +16,7 @@ namespace ArlequimPetShop.Domain.Sales
         {
             Id = id;
             Client = client;
+            TotalPrice = 0M;
 
             CreatedOn = UpdatedOn = DateTime.Now;
 
@@ -23,6 +24,9 @@ namespace ArlequimPetShop.Domain.Sales
         }
 
         public override Guid Id { get; set; }
+
+        [RequiredValidator(ErrorMessage = "Valor total da venda obrigatório.")]
+        public decimal? TotalPrice { get; set; }
 
         [RequiredValidator(ErrorMessage = "Data de criação da venda obrigatória.")]
         public virtual DateTime CreatedOn { get; set; }
@@ -39,6 +43,8 @@ namespace ArlequimPetShop.Domain.Sales
         public void AddProduct(Product product, decimal? quantity, decimal? discount, decimal? netPrice)
         {
             Products.Add(new SaleProduct(this, product, quantity, discount, netPrice));
+
+            TotalPrice += netPrice;
 
             UpdatedOn = DateTime.Now;
         }

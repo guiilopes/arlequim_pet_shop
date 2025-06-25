@@ -4,6 +4,7 @@ using ArlequimPetShop.Contracts.Commands.Products;
 using ArlequimPetShop.Contracts.Commands.Sales;
 using ArlequimPetShop.Contracts.Commands.Users;
 using ArlequimPetShop.Contracts.Queries.Products;
+using ArlequimPetShop.Contracts.Queries.Sales;
 using ArlequimPetShop.Contracts.Queries.Users;
 using ArlequimPetShop.Domain.Clients.Services;
 using ArlequimPetShop.Domain.Products.Services;
@@ -86,6 +87,7 @@ namespace ArlequimPetShop.Infrastructure
         private static void RegisterQueries(IServiceCollection services)
         {
             services.AddSingleton<ProductQueryHandler>();
+            services.AddSingleton<SaleQueryHandler>();
             services.AddSingleton<UserQueryHandler>();
 
             services.AddSingleton<IRequestBus>(a =>
@@ -96,6 +98,10 @@ namespace ArlequimPetShop.Infrastructure
                 queryBus.Register<ProductQuery, ProductQueryResult>(productHandler);
                 queryBus.Register<ProductByIdQuery, ProductByIdQueryResult>(productHandler);
                 queryBus.Register<ProductStockQuery, ProductStockQueryResult>(productHandler);
+
+                var saleHandler = a.GetService<SaleQueryHandler>();
+                queryBus.Register<SaleQuery, SaleQueryResult>(saleHandler);
+                queryBus.Register<SaleByIdQuery, SaleByIdQueryResult>(saleHandler);
 
                 var userHandler = a.GetService<UserQueryHandler>();
                 queryBus.Register<UserQuery, UserQueryResult>(userHandler);

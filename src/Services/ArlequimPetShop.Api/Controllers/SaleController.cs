@@ -1,10 +1,5 @@
-using ArlequimPetShop.Contracts.Commands.Products;
 using ArlequimPetShop.Contracts.Commands.Sales;
-using ArlequimPetShop.Contracts.Commands.Users;
-using ArlequimPetShop.Contracts.Queries.Products;
-using ArlequimPetShop.Contracts.Queries.Users;
-using ArlequimPetShop.SharedKernel;
-using Microsoft.AspNetCore.Authorization;
+using ArlequimPetShop.Contracts.Queries.Sales;
 using Microsoft.AspNetCore.Mvc;
 using SrShut.Common;
 using SrShut.Cqrs.Commands;
@@ -26,6 +21,19 @@ namespace ArlequimPetShop.Api.Controllers
 
             _commandBus = commandBus;
             _requestBus = requestBus;
+        }
+
+        //[Authorize(Roles = $"{Roles.Admin}, {Roles.Seller}")]
+        [HttpGet]
+        public async Task<SaleQueryResult> Get([FromQuery] SaleQuery query)
+        {
+            return await _requestBus.RequestAsync<SaleQuery, SaleQueryResult>(query);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<SaleByIdQueryResult> GetDetail(Guid id)
+        {
+            return await _requestBus.RequestAsync<SaleByIdQuery, SaleByIdQueryResult>(new SaleByIdQuery(id));
         }
 
         [HttpPost]

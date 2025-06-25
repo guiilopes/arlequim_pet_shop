@@ -9,6 +9,8 @@ namespace ArlequimPetShop.Infrastructure.Databases.Mappings
         {
             Id(m => m.Id).Not.Nullable();
 
+            Map(m => m.TotalPrice).Not.Nullable();
+
             Map(m => m.CreatedOn).Not.Nullable();
             Map(m => m.UpdatedOn).Not.Nullable();
             Map(m => m.DeletedOn).Nullable();
