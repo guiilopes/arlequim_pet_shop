@@ -24,7 +24,6 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 IServiceCollection services = builder.Services;
 IConfiguration configuration = builder.Configuration;
 var host = builder.Host;
-
 var culture = CultureInfo.CurrentCulture = new CultureInfo("pt-BR");
 
 CultureInfo.CurrentCulture = culture;
@@ -112,17 +111,13 @@ else
     app.UseHsts();
 }
 
-//app.UseExceptionMiddleware();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseTrace();
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseCors("ArlequimPolicy");
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.UseSwagger(c =>
@@ -136,11 +131,9 @@ app.UseSwagger(c =>
             {
                 new OpenApiServer { Url = apiUrl }
             };
-
         });
     }
 });
 
 app.UseSwaggerUI(options => { options.SwaggerEndpoint("./v1/swagger.json", "Arlequim - PetShop - API"); });
-
 app.Run();

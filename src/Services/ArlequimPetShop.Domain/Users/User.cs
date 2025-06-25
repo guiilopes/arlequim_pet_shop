@@ -1,7 +1,13 @@
-﻿using ArlequimPetShop.SharedKernel.Enums;
+﻿using ArlequimPetShop.SharedKernel;
+using ArlequimPetShop.SharedKernel.Enums;
+using Microsoft.IdentityModel.Tokens;
+using SrShut.Common;
 using SrShut.Cqrs.Domains;
 using SrShut.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ArlequimPetShop.Domain.Users
 {
@@ -12,9 +18,10 @@ namespace ArlequimPetShop.Domain.Users
             Logins = new List<UserLogin>();
         }
 
-        public User(Guid id, string name, string email, string password) : this()
+        public User(Guid id, UserTypes type, string name, string email, string password) : this()
         {
             Id = id;
+            Type = type;
             Name = name;
             Email = email;
             Password = password;
@@ -36,7 +43,7 @@ namespace ArlequimPetShop.Domain.Users
         [RequiredValidator(ErrorMessage = "Email do usuário obrigatório")]
         public virtual string Email { get; set; }
 
-        [StringLength(maximumLength: 50, ErrorMessage = "Tamanho máximo para o Logradouro é de {1} characteres.", MinimumLength = 6)]
+        [StringLength(maximumLength: 50, ErrorMessage = "A senha precisa ter entre {2} e {1} characteres.", MinimumLength = 6)]
         [RequiredValidator(ErrorMessage = "Senha do usuário obrigatório")]
         public virtual string Password { get; set; }
 
@@ -50,9 +57,9 @@ namespace ArlequimPetShop.Domain.Users
 
         public virtual IList<UserLogin> Logins { get; set; }
 
-        public string Login(string email, string passsword)
+        public string Login(string email, string secret)
         {
-            var token = GenerateToken(email, passsword);
+            var token = GenerateToken(email, secret);
             var entity = new UserLogin(this, email);
 
             Logins.Add(entity);
@@ -60,9 +67,27 @@ namespace ArlequimPetShop.Domain.Users
             return token;
         }
 
-        public string GenerateToken(string email, string password)
+        public string GenerateToken(string email, string secret)
         {
-            return string.Empty;
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim("name", email),
+                new Claim("role", Util.EnumDescription(Type)),
+                new Claim("userId", Id.ToString()),
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: "arlequim",
+                audience: "arlequim-petshop",
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(8),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public void Update(string name, string email, string password)

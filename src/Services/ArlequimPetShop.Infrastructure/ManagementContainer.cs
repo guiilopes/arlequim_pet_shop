@@ -6,6 +6,7 @@ using ArlequimPetShop.Domain.Users;
 using ArlequimPetShop.Infrastructure.Databases.Mappings;
 using ArlequimPetShop.Infrastructure.Databases.Repositories;
 using ArlequimPetShop.SharedKernel;
+using ArlequimPetShop.SharedKernel.Options;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
@@ -52,6 +53,7 @@ namespace ArlequimPetShop.Infrastructure
         private static IServiceCollection RegisterServices(IConfiguration configuration, IServiceCollection services)
         {
             services.Configure<AppSettingsOptions>(configuration.GetSection("AppSettings"));
+            services.Configure<ArlequimSecurityOptions>(configuration.GetSection("Security"));
 
             services.AddTransient<HttpClientSecurityDelegatingHandler>();
             services.AddTransient<BaseHttpClient>();
@@ -135,6 +137,7 @@ namespace ArlequimPetShop.Infrastructure
 
                 var userHandler = a.GetService<UserCommandHandler>();
                 commandBus.Register<UserCreateCommand>(userHandler);
+                commandBus.Register<UserLoginCommand>(userHandler);
 
                 return commandBus;
             });

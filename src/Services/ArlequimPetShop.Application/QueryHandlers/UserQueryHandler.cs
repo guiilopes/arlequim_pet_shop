@@ -50,8 +50,9 @@ namespace ArlequimPetShop.Application.QueryHandlers
                     var item = new UserQueryResult.UserQueryItem()
                     {
                         Id = row.Id,
+                        Type = row.Type,
                         Name = row.Name,
-                        Email = row.Status,
+                        Email = row.Email,
                         CreatedOn = row.CreatedOn,
                         UpdatedOn = row.UpdatedOn,
                     };

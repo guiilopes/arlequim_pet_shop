@@ -1,22 +1,17 @@
-﻿using ArlequimPetShop.SharedKernel.Enums;
-using SrShut.Cqrs.Commands;
+﻿using SrShut.Cqrs.Commands;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace ArlequimPetShop.Contracts.Commands.Users
 {
-    public class UserCreateCommand : ICommand
+    public class UserLoginCommand : ICommand
     {
-        [JsonIgnore]
-        public Guid? Id { get; set; }
-
-        public UserTypes Type { get; set; }
-
-        public string? Name { get; set; }
-
         public string? Email { get; set; }
 
         [DataType(DataType.Password)]
         public string? Password { get; set; }
+
+        [JsonIgnore]
+        public string? Token { get; set; }
     }
 }
