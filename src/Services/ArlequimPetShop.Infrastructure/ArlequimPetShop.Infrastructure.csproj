@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArlequimPetShop.Application\ArlequimPetShop.Application.csproj" />
+    <ProjectReference Include="..\ArlequimPetShop.Domain\ArlequimPetShop.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentNHibernate" Version="3.4.1" />
+    <PackageReference Include="MassTransit" Version="8.5.0" />
+    <PackageReference Include="NHibernate" Version="5.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SrShut.Cache">
+      <HintPath>..\..\Libraries\SrShut.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Common">
+      <HintPath>..\..\Libraries\SrShut.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Cqrs">
+      <HintPath>..\..\Libraries\SrShut.Cqrs.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Data">
+      <HintPath>..\..\Libraries\SrShut.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Nhibernate">
+      <HintPath>..\..\Libraries\SrShut.Nhibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Security">
+      <HintPath>..\..\Libraries\SrShut.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

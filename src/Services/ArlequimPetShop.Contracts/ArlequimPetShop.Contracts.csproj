@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\ArlequimPetShop.SharedKernel\ArlequimPetShop.SharedKernel.csproj" />
+    <ProjectReference Include="..\ArlequimPetShop.Domain\ArlequimPetShop.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SrShut.Common">
+      <HintPath>..\..\Libraries\SrShut.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Cqrs">
+      <HintPath>..\..\Libraries\SrShut.Cqrs.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Data">
+      <HintPath>..\..\Libraries\SrShut.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Nhibernate">
+      <HintPath>..\..\Libraries\SrShut.Nhibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Security">
+      <HintPath>..\..\Libraries\SrShut.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

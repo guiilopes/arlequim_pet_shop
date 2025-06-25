@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EnyimMemcachedCore" Version="2.5.7" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.2.3" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
+    <PackageReference Include="NHibernate" Version="5.4.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SrShut.Common">
+      <HintPath>..\..\Libraries\SrShut.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Cqrs">
+      <HintPath>..\..\Libraries\SrShut.Cqrs.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Data">
+      <HintPath>..\..\Libraries\SrShut.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Nhibernate">
+      <HintPath>..\..\Libraries\SrShut.Nhibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Security">
+      <HintPath>..\..\Libraries\SrShut.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
