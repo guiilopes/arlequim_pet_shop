@@ -2,11 +2,14 @@
 using ArlequimPetShop.Application.QueryHandlers;
 using ArlequimPetShop.Contracts.Commands.Users;
 using ArlequimPetShop.Contracts.Queries.Users;
+using ArlequimPetShop.Domain.Users;
 using ArlequimPetShop.Infrastructure.Databases.Mappings;
+using ArlequimPetShop.Infrastructure.Databases.Repositories;
 using ArlequimPetShop.SharedKernel;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
@@ -84,12 +87,11 @@ namespace ArlequimPetShop.Infrastructure
 
         private static void AcquisitionServices(IServiceCollection services)
         {
-            //services.AddSingleton<PortfolioAwaitingSettlementService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            //services.AddSingleton<IAcquisitionRepository, AcquisitionNHRepository>();
+            services.AddSingleton<IUserRepository, UserNHRpository>();
         }
 
         private static void RegisterBus(IServiceCollection services, bool isLambda = false)
@@ -101,10 +103,10 @@ namespace ArlequimPetShop.Infrastructure
                 if (isLambda)
                 {
                     a.AddLoopback();
-                    a.AddKafka();
+                    //a.AddKafka();
                 }
-                else
-                    a.AddKafka();
+                //else
+                //    a.AddKafka();
             });
         }
 

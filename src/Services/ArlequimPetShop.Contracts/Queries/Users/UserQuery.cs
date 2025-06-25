@@ -1,18 +1,19 @@
 ﻿using SrShut.Cqrs.Requests;
+using SrShut.Data;
 
 namespace ArlequimPetShop.Contracts.Queries.Users
 {
-    public class UserQuery : IRequest<UserQueryResult>
+    public class UserQuery : PaginationCriteria, IRequest<UserQueryResult>
     {
         public UserQuery()
         {
         }
 
-        public UserQuery(string text) : base()
+        public UserQuery(string? text) : base()
         {
             Text = text;
         }
 
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 }

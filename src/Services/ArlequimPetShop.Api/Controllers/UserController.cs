@@ -24,9 +24,8 @@ namespace ArlequimPetShop.Api.Controllers
             _requestBus = requestBus;
         }
 
-        [Authorize(Roles = $"{Roles.Admin}")]
         [HttpGet]
-        public async Task<UserQueryResult> Get(UserQuery query)
+        public async Task<UserQueryResult> Get([FromQuery] UserQuery query)
         {
             return await _requestBus.RequestAsync<UserQuery, UserQueryResult>(query);
         }

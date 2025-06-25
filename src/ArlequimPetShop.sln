@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArlequimPetShop.Test", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArlequimPetShop.SharedKernel", "Core\ArlequimPetShop.SharedKernel\ArlequimPetShop.SharedKernel.csproj", "{02A5E8FA-1BBC-C286-F4BC-B6F733CD50BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArlequimPetShop.Migration", "Migrations\ArlequimPetShop.Migration\ArlequimPetShop.Migration.csproj", "{1CCA1619-B2EA-EEE2-85A4-136AEB6D21F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArlequimPetShop.Migrations", "Migrations\ArlequimPetShop.Migration\ArlequimPetShop.Migrations.csproj", "{1CCA1619-B2EA-EEE2-85A4-136AEB6D21F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArlequimPetShop.Api", "Services\ArlequimPetShop.Api\ArlequimPetShop.Api.csproj", "{20362CFB-5473-C717-31E3-B602DB5B5C9F}"
 EndProject
