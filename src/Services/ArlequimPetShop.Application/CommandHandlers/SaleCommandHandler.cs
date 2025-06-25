@@ -16,24 +16,18 @@ namespace ArlequimPetShop.Application.CommandHandlers
         private readonly IClientRepository _clientRepository;
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWorkFactory _uofwFactory;
-        private readonly IProductStockInventoryService _productStockInventoryService;
-        private readonly IProductDocumentFiscalImportService _productDocumentFiscalImportService;
 
-        public SaleCommandHandler(IProductRepository productRepository, IUnitOfWorkFactory uofwFactory, IProductStockInventoryService productStockInventoryService, IProductDocumentFiscalImportService productDocumentFiscalImportService, ISaleRepository saleRepository, IClientRepository clientRepository)
+        public SaleCommandHandler(IProductRepository productRepository, IUnitOfWorkFactory uofwFactory, ISaleRepository saleRepository, IClientRepository clientRepository)
         {
             Throw.ArgumentIsNull(saleRepository);
             Throw.ArgumentIsNull(productRepository);
             Throw.ArgumentIsNull(uofwFactory);
-            Throw.ArgumentIsNull(productStockInventoryService);
-            Throw.ArgumentIsNull(productDocumentFiscalImportService);
             Throw.ArgumentIsNull(clientRepository);
 
             _saleRepository = saleRepository;
             _productRepository = productRepository;
             _clientRepository = clientRepository;
             _uofwFactory = uofwFactory;
-            _productStockInventoryService = productStockInventoryService;
-            _productDocumentFiscalImportService = productDocumentFiscalImportService;
         }
 
         public async Task HandleAsync(SaleCreateCommand command)
@@ -41,17 +35,20 @@ namespace ArlequimPetShop.Application.CommandHandlers
             Throw.ArgumentIsNull(command);
 
             using var scope = _uofwFactory.Get();
+
             var document = Document.PutMask(command.Document);
+            Throw.IsFalse(Document.IsValid(document), "Document.IsInvalid", "Documento não é valido.");
+
             var client = await _clientRepository.GetAsyncByDocument(document);
 
             if (client == null)
             {
                 client = new Client(Guid.NewGuid(), command.Name, document);
-
                 await _clientRepository.AddAsync(client);
             }
             else
             {
+                client.Update(command.Name);
                 await _clientRepository.UpdateAsync(client);
             }
 
@@ -62,8 +59,8 @@ namespace ArlequimPetShop.Application.CommandHandlers
                 var product = await _productRepository.GetAsyncByBarcode(item.Barcode);
                 var priceWithDiscount = product.Price * (1 - item.Discount);
 
-               Throw.IsTrue(product.HasSufficientStock(item.Quantity), "Product.Stock", $"Não há quantidade suficiente do produto; Código de barra: {product.Barcode} - Nome: {product.Name}.");
-                
+                Throw.IsTrue(product.HasSufficientStock(item.Quantity), "Product.Stock", $"Não há quantidade suficiente do produto; Código de barra: {product.Barcode} - Nome: {product.Name}.");
+
                 sale.AddProduct(product, item.Quantity, item.Discount, priceWithDiscount);
                 product.RemoveStock(item.Quantity);
             }
