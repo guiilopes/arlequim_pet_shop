@@ -1,6 +1,5 @@
 using ArlequimPetShop.Contracts.Commands.Users;
 using ArlequimPetShop.Contracts.Queries.Users;
-using ArlequimPetShop.SharedKernel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SrShut.Common;
@@ -25,6 +24,7 @@ namespace ArlequimPetShop.Api.Controllers
             _requestBus = requestBus;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<UserQueryResult> Get([FromQuery] UserQuery query)
         {

@@ -1,5 +1,6 @@
 using ArlequimPetShop.Api.Helpers;
 using ArlequimPetShop.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Extensions.Logging;
@@ -9,6 +10,7 @@ using SrShut.Mvc;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,44 +61,56 @@ services.AddCors(option => option.AddPolicy("ArlequimPolicy", builder =>
 }));
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(c =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "Arlequim - PetShop - API",
-        Version = "v1",
-        Description = "Arlequim - PetShop - API"
-    });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Arlequim API", Version = "v1" });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Por favor, insira JWT com portador no campo",
+        Description = @"JWT Authorization header.  
+                        Informe assim: Bearer **seu_token_aqui**",
         Name = "Authorization",
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
                 {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Bearer",
-                                Type = ReferenceType.SecurityScheme,
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "Bearer",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
 
-    options.SchemaFilter<SwaggerIgnoreFilter>();
+    c.SchemaFilter<SwaggerIgnoreFilter>();
 
-    options.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "date", });
-    options.OrderActionsBy(apiDesc => apiDesc.RelativePath);
+    c.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "date", });
+    c.OrderActionsBy(apiDesc => apiDesc.RelativePath);
+});
+
+
+builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = "arlequim",
+        ValidAudience = "arlequim-petshop",
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(configuration["Security:Secret"]))
+    };
 });
 
 var app = builder.Build();

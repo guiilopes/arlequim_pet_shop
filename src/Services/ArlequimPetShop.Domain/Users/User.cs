@@ -59,7 +59,7 @@ namespace ArlequimPetShop.Domain.Users
 
         public string Login(string email, string secret)
         {
-            var token = GenerateToken(email, secret);
+            var token = $"Bearer {GenerateToken(email, secret)}";
             var entity = new UserLogin(this, email);
 
             Logins.Add(entity);
