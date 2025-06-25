@@ -1,5 +1,6 @@
 using ArlequimPetShop.Api.Helpers;
 using ArlequimPetShop.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
@@ -110,6 +111,23 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
         ValidAudience = "arlequim-petshop",
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(configuration["Security:Secret"]))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnForbidden = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.ContentType = "application/json";
+
+            var result = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                success = false,
+                message = "Você não tem permissão para acessar este recurso."
+            });
+
+            return context.Response.WriteAsync(result);
+        }
     };
 });
 
