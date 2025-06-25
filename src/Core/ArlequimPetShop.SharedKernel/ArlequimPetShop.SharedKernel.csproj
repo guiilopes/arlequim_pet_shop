@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="SrShut.Cache">
+      <HintPath>..\..\Libraries\SrShut.Cache.dll</HintPath>
+    </Reference>
     <Reference Include="SrShut.Common">
       <HintPath>..\..\Libraries\SrShut.Common.dll</HintPath>
     </Reference>
@@ -25,11 +28,20 @@
     <Reference Include="SrShut.Data">
       <HintPath>..\..\Libraries\SrShut.Data.dll</HintPath>
     </Reference>
+    <Reference Include="SrShut.LogSystem">
+      <HintPath>..\..\Libraries\SrShut.LogSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Mvc">
+      <HintPath>..\..\Libraries\SrShut.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="SrShut.Nhibernate">
       <HintPath>..\..\Libraries\SrShut.Nhibernate.dll</HintPath>
     </Reference>
     <Reference Include="SrShut.Security">
       <HintPath>..\..\Libraries\SrShut.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="SrShut.Validation">
+      <HintPath>..\..\Libraries\SrShut.Validation.dll</HintPath>
     </Reference>
   </ItemGroup>
 

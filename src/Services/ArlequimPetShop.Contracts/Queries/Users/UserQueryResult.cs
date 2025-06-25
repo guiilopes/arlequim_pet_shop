@@ -1,5 +1,6 @@
 ﻿using SrShut.Common.Collections;
 using SrShut.Cqrs.Requests;
+using static ArlequimPetShop.Contracts.Queries.Users.UserQueryResult;
 
 namespace ArlequimPetShop.Contracts.Queries.Users
 {
@@ -11,18 +12,18 @@ namespace ArlequimPetShop.Contracts.Queries.Users
         {
             TotalCount = items.Count;
         }
-    }
 
-    public class UserQueryItem
-    {
-        public Guid? Id { get; set; }
+        public class UserQueryItem
+        {
+            public Guid? Id { get; set; }
 
-        public string? Name { get; set; }
+            public string? Name { get; set; }
 
-        public string? Email { get; set; }
+            public string? Email { get; set; }
 
-        public DateTime? CreatedOn { get; set; }
+            public DateTime? CreatedOn { get; set; }
 
-        public DateTime? UpdatedOn { get; set; }
+            public DateTime? UpdatedOn { get; set; }
+        }
     }
 }
