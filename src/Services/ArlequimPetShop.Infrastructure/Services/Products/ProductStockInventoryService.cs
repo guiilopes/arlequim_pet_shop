@@ -1,15 +1,10 @@
 ﻿using ArlequimPetShop.Domain.Products;
 using ArlequimPetShop.Domain.Products.Dtos;
 using ArlequimPetShop.Domain.Products.Services;
-using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
-using DocumentFormat.OpenXml.Office.CustomUI;
-using NHibernate.Mapping.ByCode;
 using SrShut.Common;
-using SrShut.Validation;
 using System.Globalization;
-using System.Text;
 
 namespace ArlequimPetShop.Infrastructure.Services.Products
 {
@@ -24,17 +19,15 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
             _productRepository = productRepository;
         }
 
-        public async Task Execute(Stream stream)
+        public async Task Execute(Stream stream, string documentFiscalNumber)
         {
             Throw.ArgumentIsNull(stream);
-
-            var index = 2;
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 Delimiter = ";",
                 HasHeaderRecord = true,
-                HeaderValidated = null, 
+                HeaderValidated = null,
                 MissingFieldFound = null
             };
 
@@ -55,6 +48,7 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
                         await _productRepository.AddAsync(product);
                     }
 
+                    product.AddHistory(item.Name, item.Description, item.Quantity, documentFiscalNumber);
                     product.AddStock(quantity);
 
                     await _productRepository.UpdateAsync(product);

@@ -60,6 +60,7 @@ namespace ArlequimPetShop.Infrastructure
             services.AddTransient<BaseHttpClient>();
 
             services.AddSingleton<IProductStockInventoryService, ProductStockInventoryService>();
+            services.AddSingleton<IProductDocumentFiscalImportService, ProductDocumentFiscalImportService>();
 
             return services;
         }
@@ -90,6 +91,7 @@ namespace ArlequimPetShop.Infrastructure
                 var productHandler = a.GetService<ProductQueryHandler>();
                 queryBus.Register<ProductQuery, ProductQueryResult>(productHandler);
                 queryBus.Register<ProductByIdQuery, ProductByIdQueryResult>(productHandler);
+                queryBus.Register<ProductStockQuery, ProductStockQueryResult>(productHandler);
 
                 var userHandler = a.GetService<UserQueryHandler>();
                 queryBus.Register<UserQuery, UserQueryResult>(userHandler);
@@ -112,6 +114,7 @@ namespace ArlequimPetShop.Infrastructure
                 commandBus.Register<ProductUpdateCommand>(productHandler);
                 commandBus.Register<ProductDeleteCommand>(productHandler);
                 commandBus.Register<ProductStockInventoryCommand>(productHandler);
+                commandBus.Register<ProductDocumentFiscalImportCommand>(productHandler);
 
                 var userHandler = a.GetService<UserCommandHandler>();
                 commandBus.Register<UserCreateCommand>(userHandler);
@@ -123,21 +126,7 @@ namespace ArlequimPetShop.Infrastructure
 
         private static void RegisterEvents(IServiceCollection services)
         {
-            //services.AddSingleton<AcquisitionDomainEventHandler>();
-
-            //services.AddSingleton<IEventBus>(a =>
-            //{
-            //    var memoryBus = a.GetService<MemoryContainerBus>();
-            //    if (memoryBus == null) throw new Exception("memoryBus is not found");
-            //    var kafkaBus = a.GetService<EventBusKafka>();
-            //    if (kafkaBus == null) throw new Exception("kafkaBus is not found");
-            //    var compositeEventBus = new CompositeEventBus(memoryBus, kafkaBus);
-
-            //var domainEventHandler = a.GetService<AcquisitionDomainEventHandler>();
-            //memoryBus.Register<AcquisitionRightRequestRegisterDomainEvent>(domainEventHandler);
-
-            //    return compositeEventBus;
-            //});
+            
         }
 
         private static ISessionFactory CreateNHFactory(IConfiguration configuration, string connectionStringName)

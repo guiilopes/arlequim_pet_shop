@@ -35,9 +35,12 @@ namespace ArlequimPetShop.Domain.Products
 
         public virtual Product Product { get; set; }
 
-        public void Update(decimal? quantity)
+        public void Update(decimal? quantity, bool? incress = false)
         {
-            Quantity = quantity;
+            if (!incress.HasValue)
+                Quantity = quantity;
+            else
+                Quantity += quantity ?? 0M;
 
             UpdatedOn = DateTime.Now;
 

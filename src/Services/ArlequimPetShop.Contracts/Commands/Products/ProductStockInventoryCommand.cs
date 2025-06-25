@@ -12,6 +12,8 @@ namespace ArlequimPetShop.Contracts.Commands.Products
     {
         public ProductStockInventoryCommand() { }
 
+        public string? DocumentFiscalNumber { get; set; }
+
         [JsonIgnore]
         public string? UserName { get; set; }
 
@@ -19,6 +21,7 @@ namespace ArlequimPetShop.Contracts.Commands.Products
         /// Arquivo da planilha.  
         /// [Clique aqui para baixar o modelo](https://localhost:5001/assets/modeloestoque.csv)
         /// </summary>
+        [Required]
         public IFormFile? File { get; set; }
     }
 }

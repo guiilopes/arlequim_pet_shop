@@ -1,5 +1,6 @@
 ﻿using SrShut.Cqrs.Domains;
 using SrShut.Validation;
+using System.Text;
 
 namespace ArlequimPetShop.Domain.Products
 {
@@ -8,6 +9,7 @@ namespace ArlequimPetShop.Domain.Products
         public Product()
         {
             Stocks = new List<ProductStock>();
+            Histories = new List<ProductHistory>();
         }
 
         public Product(Guid id, string barcode, string? name, string? description, decimal? price, DateTime? expirationDate, decimal? quantity = 0M) : this()
@@ -51,7 +53,9 @@ namespace ArlequimPetShop.Domain.Products
 
         public virtual IList<ProductStock> Stocks { get; set; }
 
-        public void AddStock(decimal? quantity = 0M)
+        public virtual IList<ProductHistory> Histories { get; set; }
+
+        public void AddStock(decimal? quantity = 0M, bool? incress = false)
         {
             var stock = Stocks.Where(s => s.Product == this)
                               .FirstOrDefault();
@@ -59,7 +63,24 @@ namespace ArlequimPetShop.Domain.Products
             if (stock == null)
                 Stocks.Add(new ProductStock(this, quantity));
             else
-                stock.Update(quantity);
+                stock.Update(quantity, incress);
+
+            UpdatedOn = DateTime.Now;
+        }
+
+        public void AddHistory(string? name, string? description, decimal? quantity, string? documentNumber)
+        {
+            var message = new StringBuilder();
+
+            if (Name != name)
+                message.Append($"Produto alterado o nome de {Name} para {name}; ");
+
+            if (Description != description)
+                message.Append($"Produto alterado a descrição de {Description} para {description}; ");
+
+            var entity = new ProductHistory(this, message.ToString(), quantity, documentNumber);
+
+            Histories.Add(entity);
 
             UpdatedOn = DateTime.Now;
         }

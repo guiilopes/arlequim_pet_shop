@@ -20,7 +20,7 @@ namespace ArlequimPetShop.Migrations
 
             Create.Table("ProductStock")
                 .WithColumn("Id").AsInt32().Unique().PrimaryKey().Identity()
-                .WithColumn("ProductId").AsGuid().NotNullable().ForeignKey("FK_ProductStock", "Product", "Id")
+                .WithColumn("ProductId").AsGuid().NotNullable().ForeignKey("FK_ProductStock_Product", "Product", "Id")
                 .WithColumn("Quantity").AsDecimal(20, 10).NotNullable()
                 .WithColumn("CreatedOn").AsDateTime().NotNullable()
                 .WithColumn("UpdatedOn").AsDateTime().NotNullable()

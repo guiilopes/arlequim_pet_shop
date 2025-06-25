@@ -21,6 +21,7 @@ namespace ArlequimPetShop.Infrastructure.Databases.Mappings
             Map(m => m.DeletedOn).Nullable();
 
             HasMany(m => m.Stocks).KeyColumn("ProductId").ExtraLazyLoad().AsBag().BatchSize(16).Inverse().Cascade.AllDeleteOrphan().Where(" DeletedOn IS NULL ");
+            HasMany(m => m.Histories).KeyColumn("ProductId").ExtraLazyLoad().AsBag().BatchSize(16).Inverse().Cascade.AllDeleteOrphan().Where(" DeletedOn IS NULL ");
         }
     }
 }

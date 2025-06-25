@@ -3,13 +3,15 @@ using FluentNHibernate.Mapping;
 
 namespace ArlequimPetShop.Infrastructure.Databases.Mappings
 {
-    public class ProductStockMap : ClassMap<ProductStock>
+    public class ProductHistoryMap : ClassMap<ProductHistory>
     {
-        public ProductStockMap()
+        public ProductHistoryMap()
         {
             Id(m => m.Id).Not.Nullable().GeneratedBy.Identity();
 
+            Map(m => m.Description).Nullable();
             Map(m => m.Quantity).Not.Nullable();
+            Map(m => m.DocumentFiscalNumber).Not.Nullable();
 
             Map(m => m.CreatedOn).Nullable();
             Map(m => m.UpdatedOn).Nullable();

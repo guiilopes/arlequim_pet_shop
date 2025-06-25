@@ -42,11 +42,11 @@ namespace ArlequimPetShop.Api.Controllers
         }
 
         //[Authorize(Roles = $"{Roles.Admin}, {Roles.Seller}")]
-        //[HttpGet("{id}")]
-        //public async Task<ProductStockHistoryByIdQueryResult> GetStockHistory([FromQuery] ProductStockHistoryByIdQuery query)
-        //{
-        //    return await _requestBus.RequestAsync<ProductStockHistoryByIdQuery, ProductStockHistoryByIdQueryResult>(query);
-        //}
+        [HttpGet("stocks")]
+        public async Task<ProductStockQueryResult> GetStocks([FromQuery] ProductStockQuery query)
+        {
+            return await _requestBus.RequestAsync<ProductStockQuery, ProductStockQueryResult>(query);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateCommand command)

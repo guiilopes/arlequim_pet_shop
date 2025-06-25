@@ -1,0 +1,44 @@
+﻿using SrShut.Validation;
+
+namespace ArlequimPetShop.Domain.Products
+{
+    public class ProductHistory
+    {
+        public ProductHistory()
+        {
+
+        }
+
+        public ProductHistory(Product product, string description, decimal? quantity, string? documentNumber) : this()
+        {
+            Product = product;
+            Description = description;
+            Quantity = quantity;
+            DocumentFiscalNumber = documentNumber;
+
+            CreatedOn = UpdatedOn = DateTime.Now;
+
+            this.Validate();
+        }
+
+        public int Id { get; set; }
+
+        public string Description { get; set; }
+
+        [RequiredValidator(ErrorMessage = "Nome do produto obrigatório.")]
+        public decimal? Quantity { get; set; }
+
+        [RequiredValidator(ErrorMessage = "Número da nota fiscal do produto obrigatório.")]
+        public string? DocumentFiscalNumber { get; set; }
+
+        [RequiredValidator(ErrorMessage = "Data de criação do histórico do produto obrigatório.")]
+        public virtual DateTime CreatedOn { get; set; }
+
+        [RequiredValidator(ErrorMessage = "Data de atualização do histórico do produto obrigatório.")]
+        public virtual DateTime UpdatedOn { get; set; }
+
+        public virtual DateTime? DeletedOn { get; set; }
+
+        public virtual Product Product { get; set; }
+    }
+}

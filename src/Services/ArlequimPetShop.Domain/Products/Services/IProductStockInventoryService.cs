@@ -2,6 +2,6 @@
 {
     public interface IProductStockInventoryService
     {
-        Task Execute(Stream stream);
+        Task Execute(Stream stream, string documentFiscalNumber);
     }
 }
