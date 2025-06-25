@@ -11,6 +11,7 @@ using SrShut.Mvc;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -94,6 +95,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+
+    c.SchemaFilter<FileUploadSchemaFilter>();
     c.SchemaFilter<SwaggerIgnoreFilter>();
 
     c.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "date", });
@@ -143,6 +149,7 @@ else
     app.UseHsts();
 }
 
+app.UseStaticFiles();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseTrace();
 app.UseHttpsRedirection();

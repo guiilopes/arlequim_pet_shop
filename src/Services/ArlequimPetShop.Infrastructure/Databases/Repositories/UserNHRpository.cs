@@ -1,4 +1,5 @@
 ﻿using ArlequimPetShop.Domain.Users;
+using ArlequimPetShop.Domain.Users.Services;
 using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Linq;

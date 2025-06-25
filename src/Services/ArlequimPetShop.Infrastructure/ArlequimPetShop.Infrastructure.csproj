@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
     <PackageReference Include="FluentNHibernate" Version="3.4.1" />
     <PackageReference Include="MassTransit" Version="8.5.0" />
     <PackageReference Include="NHibernate" Version="5.5.2" />

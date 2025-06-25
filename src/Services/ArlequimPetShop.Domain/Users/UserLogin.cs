@@ -20,10 +20,10 @@ namespace ArlequimPetShop.Domain.Users
 
         public virtual string Email { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de criação do loging obrigatório")]
+        [RequiredValidator(ErrorMessage = "Data de criação do loging obrigatório.")]
         public DateTime CreatedOn { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de atualização do loging obrigatório")]
+        [RequiredValidator(ErrorMessage = "Data de atualização do loging obrigatório.")]
         public DateTime UpdatedOn { get; set; }
 
         public DateTime? DeletedOn { get; set; }

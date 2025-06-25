@@ -1,6 +1,6 @@
 ﻿using SrShut.Data;
 
-namespace ArlequimPetShop.Domain.Users
+namespace ArlequimPetShop.Domain.Users.Services
 {
     public interface IUserRepository : IRepository<User>
     {

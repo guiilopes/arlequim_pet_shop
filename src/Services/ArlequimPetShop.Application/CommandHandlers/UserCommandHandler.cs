@@ -1,5 +1,6 @@
 ﻿using ArlequimPetShop.Contracts.Commands.Users;
 using ArlequimPetShop.Domain.Users;
+using ArlequimPetShop.Domain.Users.Services;
 using ArlequimPetShop.SharedKernel.Options;
 using Microsoft.Extensions.Options;
 using SrShut.Common;

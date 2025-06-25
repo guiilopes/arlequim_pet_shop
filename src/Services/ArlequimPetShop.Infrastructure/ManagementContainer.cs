@@ -1,10 +1,14 @@
 ﻿using ArlequimPetShop.Application.CommandHandlers;
 using ArlequimPetShop.Application.QueryHandlers;
+using ArlequimPetShop.Contracts.Commands.Products;
 using ArlequimPetShop.Contracts.Commands.Users;
+using ArlequimPetShop.Contracts.Queries.Products;
 using ArlequimPetShop.Contracts.Queries.Users;
-using ArlequimPetShop.Domain.Users;
+using ArlequimPetShop.Domain.Products.Services;
+using ArlequimPetShop.Domain.Users.Services;
 using ArlequimPetShop.Infrastructure.Databases.Mappings;
 using ArlequimPetShop.Infrastructure.Databases.Repositories;
+using ArlequimPetShop.Infrastructure.Services.Products;
 using ArlequimPetShop.SharedKernel;
 using ArlequimPetShop.SharedKernel.Options;
 using FluentNHibernate.Cfg;
@@ -29,7 +33,7 @@ namespace ArlequimPetShop.Infrastructure
 {
     public class ManagementContainer
     {
-        public static void Install(IConfiguration configuration, IServiceCollection services, bool isLambda = false)
+        public static void Install(IConfiguration configuration, IServiceCollection services)
         {
             var nhFactory = CreateNHFactory(configuration, "DefaultConnectionString");
 
@@ -40,14 +44,11 @@ namespace ArlequimPetShop.Infrastructure
             RegisterServices(configuration, services);
             RegisterRepositories(services);
 
-            RegisterBus(services, isLambda);
+            RegisterBus(services);
 
             RegisterCommands(services);
             RegisterQueries(services);
             RegisterEvents(services);
-            RegisterWorkers(services);
-            RegisterGlobalCriteriaProcessors(services);
-            RegisterIndividualCriteriaProcessors(services);
         }
 
         private static IServiceCollection RegisterServices(IConfiguration configuration, IServiceCollection services)
@@ -58,67 +59,37 @@ namespace ArlequimPetShop.Infrastructure
             services.AddTransient<HttpClientSecurityDelegatingHandler>();
             services.AddTransient<BaseHttpClient>();
 
-            AcquisitionServices(services);
-            AutorizationServices(services);
-            CalculatorServices(services);
-            FileServices(services);
-            OperationServices(services);
+            services.AddSingleton<IProductStockInventoryService, ProductStockInventoryService>();
 
             return services;
         }
 
-        private static void OperationServices(IServiceCollection services)
-        {
-
-        }
-
-        private static void FileServices(IServiceCollection services)
-        {
-
-        }
-
-        private static void CalculatorServices(IServiceCollection services)
-        {
-
-        }
-
-        private static void AutorizationServices(IServiceCollection services)
-        {
-
-        }
-
-        private static void AcquisitionServices(IServiceCollection services)
-        {
-        }
-
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddSingleton<IProductRepository, ProductNHRpository>();
             services.AddSingleton<IUserRepository, UserNHRpository>();
         }
 
-        private static void RegisterBus(IServiceCollection services, bool isLambda = false)
+        private static void RegisterBus(IServiceCollection services)
         {
             services.AddBus(a =>
             {
                 a.AddMemory();
-
-                if (isLambda)
-                {
-                    a.AddLoopback();
-                    //a.AddKafka();
-                }
-                //else
-                //    a.AddKafka();
             });
         }
 
         private static void RegisterQueries(IServiceCollection services)
         {
+            services.AddSingleton<ProductQueryHandler>();
             services.AddSingleton<UserQueryHandler>();
 
             services.AddSingleton<IRequestBus>(a =>
             {
                 var queryBus = a.GetService<MemoryContainerBus>() ?? throw new Exception("queryBus is not found");
+
+                var productHandler = a.GetService<ProductQueryHandler>();
+                queryBus.Register<ProductQuery, ProductQueryResult>(productHandler);
+                queryBus.Register<ProductByIdQuery, ProductByIdQueryResult>(productHandler);
 
                 var userHandler = a.GetService<UserQueryHandler>();
                 queryBus.Register<UserQuery, UserQueryResult>(userHandler);
@@ -129,11 +100,18 @@ namespace ArlequimPetShop.Infrastructure
 
         private static void RegisterCommands(IServiceCollection services)
         {
+            services.AddSingleton<ProductCommandHandler>();
             services.AddSingleton<UserCommandHandler>();
 
             services.AddSingleton<ICommandBus>(a =>
             {
                 var commandBus = a.GetService<MemoryContainerBus>() ?? throw new Exception("commandBus is not found");
+
+                var productHandler = a.GetService<ProductCommandHandler>();
+                commandBus.Register<ProductCreateCommand>(productHandler);
+                commandBus.Register<ProductUpdateCommand>(productHandler);
+                commandBus.Register<ProductDeleteCommand>(productHandler);
+                commandBus.Register<ProductStockInventoryCommand>(productHandler);
 
                 var userHandler = a.GetService<UserCommandHandler>();
                 commandBus.Register<UserCreateCommand>(userHandler);
@@ -157,34 +135,9 @@ namespace ArlequimPetShop.Infrastructure
 
             //var domainEventHandler = a.GetService<AcquisitionDomainEventHandler>();
             //memoryBus.Register<AcquisitionRightRequestRegisterDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionStatusUpdateDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionRightAcquiredDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionRightStatusUpdateDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionSendNotificationDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionIndividualEligibilityCriteriaDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionGlobalEligibilityCriteriaDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionSendTermDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionAwaitingSettlementDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionReliabilityDomainEvent>(domainEventHandler);
-            //memoryBus.Register<AcquisitionSentCollateralDomainEvent>(domainEventHandler);
 
             //    return compositeEventBus;
             //});
-        }
-
-        private static void RegisterWorkers(IServiceCollection services)
-        {
-
-        }
-
-        private static void RegisterGlobalCriteriaProcessors(IServiceCollection services)
-        {
-
-        }
-
-        private static void RegisterIndividualCriteriaProcessors(IServiceCollection services)
-        {
-
         }
 
         private static ISessionFactory CreateNHFactory(IConfiguration configuration, string connectionStringName)

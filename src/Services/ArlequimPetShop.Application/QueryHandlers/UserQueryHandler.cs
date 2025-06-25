@@ -8,7 +8,7 @@ using System.Text;
 namespace ArlequimPetShop.Application.QueryHandlers
 {
     public class UserQueryHandler : BaseDataAccess,
-                                   IRequestHandler<UserQuery, UserQueryResult>
+                                    IRequestHandler<UserQuery, UserQueryResult>
 
     {
         public UserQueryHandler(IConfiguration configuration) : base(configuration)

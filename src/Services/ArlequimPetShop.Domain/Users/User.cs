@@ -1,6 +1,4 @@
-﻿using ArlequimPetShop.SharedKernel;
-using ArlequimPetShop.SharedKernel.Enums;
-using Microsoft.AspNetCore.Mvc.Formatters;
+﻿using ArlequimPetShop.SharedKernel.Enums;
 using Microsoft.IdentityModel.Tokens;
 using SrShut.Common;
 using SrShut.Common.Exceptions;
@@ -36,20 +34,20 @@ namespace ArlequimPetShop.Domain.Users
             this.Validate();
         }
 
-        [RequiredValidator(ErrorMessage = "Id obrigatório")]
+        [RequiredValidator(ErrorMessage = "Id obrigatório.")]
         public override Guid Id { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Tipo do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Tipo do usuário obrigatório.")]
         public virtual UserTypes Type { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Nome do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Nome do usuário obrigatório.")]
         public virtual string Name { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Email do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Email do usuário obrigatório.")]
         public virtual string Email { get; set; }
 
         [StringLength(maximumLength: 50, ErrorMessage = "A senha precisa ter entre {2} e {1} characteres.", MinimumLength = 6)]
-        [RequiredValidator(ErrorMessage = "Senha do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Senha do usuário obrigatório.")]
         public string Password
         {
             get => _password;
@@ -62,10 +60,10 @@ namespace ArlequimPetShop.Domain.Users
             }
         }
 
-        [RequiredValidator(ErrorMessage = "Data de criação do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Data de criação do usuário obrigatório.")]
         public virtual DateTime CreatedOn { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Data de atualização do usuário obrigatório")]
+        [RequiredValidator(ErrorMessage = "Data de atualização do usuário obrigatório.")]
         public virtual DateTime UpdatedOn { get; set; }
 
         public virtual DateTime? DeletedOn { get; set; }

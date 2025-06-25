@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentMigrator" Version="7.1.0" />
-    <PackageReference Include="FluentMigrator.Runner" Version="7.1.0" />
-    <PackageReference Include="FluentMigrator.Runner.SqlServer" Version="7.1.0" />
+    <PackageReference Include="FluentMigrator" Version="3.3.2" />
+    <PackageReference Include="FluentMigrator.Extensions.SqlServer" Version="3.3.2" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>
