@@ -47,17 +47,7 @@ Presentation (Controllers / APIs)
 
 ---
 
-### 📦 SaleProduct
-
-| Propriedade | Tipo     | Descrição                     |
-|-------------|----------|-------------------------------|
-| `Barcode`   | `string` | Código de barras do produto   |
-| `Quantity`  | `decimal`| Quantidade vendida            |
-| `Discount`  | `decimal`| Desconto aplicado             |
-
----
-
-### 🐕 Product
+### 📦 Product (Produtos)
 
 | Propriedade     | Tipo     | Descrição         |
 |-----------------|----------|--------------------|
@@ -65,6 +55,15 @@ Presentation (Controllers / APIs)
 | `Name`          | `string` | Nome do produto    |
 | `StockQuantity` | `decimal`| Estoque atual      |
 | `Price`         | `decimal`| Preço unitário     |
+
+---
+
+### 🐕 Client (Cliente)
+
+| Propriedade | Tipo     | Descrição              |
+|-------------|----------|------------------------|
+| `Document`  | `string` | Documento do cliente   |
+| `Name`      | `string` | Nome do cliente        |
 
 ---
 
@@ -119,12 +118,16 @@ Presentation (Controllers / APIs)
 | NUnit + Moq      | Testes unitários        |
 | IConfiguration   | Configuração da aplicação |
 | ILogger          | Logs estruturados       |
+| SrShut.Data      | Biblioteca e ferramenta auxiliar criada por Guilherme Lopes       |
+
+#### 📚 SrShut.Data
+📄 Veja o guia completo: [README.md](https://github.com/guiilopes/srshut.data/blob/master/README.md)
 
 ---
 
 ## 🔐 Segurança
 
-- 🔐 Autenticação com suporte a JWT (opcional)
+- 🔐 Autenticação com suporte a JWT 
 - ✅ Validação de entrada via DataAnnotations ou FluentValidation
 - 🧱 Separação de responsabilidades com arquitetura em camadas
 
