@@ -15,7 +15,8 @@ namespace ArlequimPetShop.Application.QueryHandlers
     public class ProductQueryHandler : BaseDataAccess,
                                        IRequestHandler<ProductQuery, ProductQueryResult>,
                                        IRequestHandler<ProductByIdQuery, ProductByIdQueryResult>,
-                                       IRequestHandler<ProductStockQuery, ProductStockQueryResult>
+                                       IRequestHandler<ProductStockQuery, ProductStockQueryResult>,
+                                       IRequestHandler<ProductHistoryByIdQuery, ProductHistoryByIdQueryResult>
     {
         /// <summary>
         /// Construtor do handler que recebe a configuração do sistema.
@@ -106,7 +107,7 @@ namespace ArlequimPetShop.Application.QueryHandlers
             INNER JOIN ProductStock AS PS WITH(NOLOCK) ON PS.ProductId = P.Id
             WHERE P.DeletedOn IS NULL
               AND PS.DeletedOn IS NULL
-              AND P.Id = @Id
+              {Condition(query)}
             ORDER BY P.Name;";
 
             using var con = CreateConnection();
@@ -188,6 +189,64 @@ namespace ArlequimPetShop.Application.QueryHandlers
         }
 
         /// <summary>
+        /// Retorna a listagem paginada do histórico de produtos.
+        /// </summary>
+        /// <param name="query">Parâmetros de filtro e paginação.</param>
+        /// <returns>Lista paginada de estoque de produtos.</returns>
+        public async Task<ProductHistoryByIdQueryResult> HandleAsync(ProductHistoryByIdQuery query)
+        {
+            var orderBy = " ORDER BY PH.CreatedOn DESC ";
+
+            var sql = $@"
+            WITH RecordsRN AS (
+                SELECT 
+                    PH.Id,
+                    PH.ProductId,
+                    PH.Description,
+                    PH.Quantity,
+                    PH.DocumentFiscalNumber,
+                    PH.CreatedOn,
+                    PH.UpdatedOn,
+                    ROW_NUMBER() OVER({orderBy}) as NumberLine,
+                    COUNT(*) OVER() AS TotalRows 
+                FROM [ProductHistory] AS PH WITH(NOLOCK)
+                WHERE PH.DeletedOn IS NULL
+                  AND PH.ProductId = @Id
+            )
+            SELECT * FROM RecordsRN WITH(NOLOCK) 
+            WHERE NumberLine BETWEEN @FirstResult AND @LastResult 
+            ORDER BY NumberLine ASC;";
+
+            var items = new ProductHistoryByIdQueryResult();
+
+            using var con = CreateConnection();
+            var results = await con.QueryAsync<dynamic>(sql, query);
+            int? totalRows = null;
+
+            foreach (var row in results)
+            {
+                if (!totalRows.HasValue)
+                    totalRows = row.TotalRows;
+
+                var item = new ProductHistoryByIdQueryResult.ProductHistoryByIdQueryResultItem()
+                {
+                    Id = row.Id,
+                    ProductId = row.ProductId,
+                    Description = row.Description,
+                    Quantity = row.Quantity,
+                    DocumentFiscalNumber = row.DocumentFiscalNumber,
+                    CreatedOn = row.CreatedOn,
+                    UpdatedOn = row.UpdatedOn,
+                };
+
+                items.Itens.Add(item);
+            }
+
+            items.TotalCount = totalRows ?? 0;
+            return items;
+        }
+
+        /// <summary>
         /// Gera cláusulas condicionais para <see cref="ProductQuery"/>.
         /// Suporta filtros por texto e datas de validade.
         /// </summary>
@@ -210,6 +269,23 @@ namespace ArlequimPetShop.Application.QueryHandlers
                 condition.Append($@" AND (P.ExpirationDate >= @StartExpirationDate) ");
             else if (query.EndExpirationDate.HasValue)
                 condition.Append($@" AND (P.ExpirationDate <= @EndExpirationDate) ");
+
+            return condition.ToString();
+        }
+
+        /// <summary>
+        /// Gera cláusulas condicionais para <see cref="ProductByIdQuery"/>.
+        /// Suporta filtros por texto e datas de validade.
+        /// </summary>
+        private string Condition(ProductByIdQuery query)
+        {
+            var condition = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(query.Text))
+            {
+                var like = " LIKE '%' + @Text + '%' ";
+                condition.Append($@" AND ( P.Id {like} OR P.Name {like} OR P.Description {like} ) ");
+            }
 
             return condition.ToString();
         }

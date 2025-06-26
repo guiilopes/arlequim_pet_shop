@@ -1,4 +1,5 @@
 ﻿using SrShut.Cqrs.Requests;
+using System.ComponentModel.DataAnnotations;
 
 namespace ArlequimPetShop.Contracts.Queries.Products
 {
@@ -15,29 +16,15 @@ namespace ArlequimPetShop.Contracts.Queries.Products
         /// <summary>
         /// Inicializa uma nova instância da consulta com parâmetros opcionais.
         /// </summary>
-        /// <param name="id">Identificador único do produto.</param>
-        /// <param name="name">Nome do produto.</param>
-        /// <param name="description">Descrição do produto.</param>
-        public ProductByIdQuery(Guid? id, string? name, string? description)
+        /// <param name="text">Identificador do produto.</param>
+        public ProductByIdQuery(string? text)
         {
-            Id = id;
-            Name = name;
-            Description = description;
+            Text = text;
         }
 
         /// <summary>
-        /// Identificador único do produto.
+        /// Identificador do produto.
         /// </summary>
-        public Guid? Id { get; set; }
-
-        /// <summary>
-        /// Nome do produto.
-        /// </summary>
-        public string? Name { get; set; }
-
-        /// <summary>
-        /// Descrição do produto.
-        /// </summary>
-        public string? Description { get; set; }
+        public string? Text { get; set; }
     }
 }

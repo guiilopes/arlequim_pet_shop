@@ -117,6 +117,7 @@ namespace ArlequimPetShop.Infrastructure
                 queryBus.Register<ProductQuery, ProductQueryResult>(productHandler);
                 queryBus.Register<ProductByIdQuery, ProductByIdQueryResult>(productHandler);
                 queryBus.Register<ProductStockQuery, ProductStockQueryResult>(productHandler);
+                queryBus.Register<ProductHistoryByIdQuery, ProductHistoryByIdQueryResult>(productHandler);
 
                 var saleHandler = a.GetService<SaleQueryHandler>();
                 queryBus.Register<SaleQuery, SaleQueryResult>(saleHandler);

@@ -44,16 +44,27 @@ namespace ArlequimPetShop.Api.Controllers
         }
 
         /// <summary>
+        /// Obtém os detalhes de um produto por um texto.
+        /// </summary>
+        /// <param name="text">Identificador do produto.</param>
+        /// <param name="query">Consulta com filtros adicionais.</param>
+        [Authorize(Roles = $"{Roles.Admin}, {Roles.Seller}")]
+        [HttpGet("{text}")]
+        public async Task<ProductByIdQueryResult> GetDetail(string? text, [FromQuery] ProductByIdQuery query)
+        {
+            return await _requestBus.RequestAsync<ProductByIdQuery, ProductByIdQueryResult>(new ProductByIdQuery(text));
+        }
+
+        /// <summary>
         /// Obtém os detalhes de um produto por ID.
         /// </summary>
         /// <param name="id">Identificador do produto.</param>
         /// <param name="query">Consulta com filtros adicionais.</param>
         [Authorize(Roles = $"{Roles.Admin}, {Roles.Seller}")]
-        [HttpGet("{id}")]
-        public async Task<ProductByIdQueryResult> GetDetail(Guid? id, [FromQuery] ProductByIdQuery query)
+        [HttpGet("{id}/histories")]
+        public async Task<ProductHistoryByIdQueryResult> GetHistoriesById(Guid? id, [FromQuery] ProductHistoryByIdQuery query)
         {
-            return await _requestBus.RequestAsync<ProductByIdQuery, ProductByIdQueryResult>(
-                new ProductByIdQuery(id, query.Name, query.Description));
+            return await _requestBus.RequestAsync<ProductHistoryByIdQuery, ProductHistoryByIdQueryResult>(new ProductHistoryByIdQuery(id));
         }
 
         /// <summary>
