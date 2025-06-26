@@ -34,8 +34,16 @@ using System.Data;
 
 namespace ArlequimPetShop.Infrastructure
 {
+    /// <summary>
+    /// Responsável por registrar e configurar todos os serviços, repositórios, comandos, queries e infraestrutura da aplicação.
+    /// </summary>
     public class ManagementContainer
     {
+        /// <summary>
+        /// Método principal que realiza o bootstrapping dos serviços e infraestrutura da aplicação.
+        /// </summary>
+        /// <param name="configuration">Instância de <see cref="IConfiguration"/> contendo as configurações da aplicação.</param>
+        /// <param name="services">Coleção de serviços <see cref="IServiceCollection"/> que será populada com as dependências.</param>
         public static void Install(IConfiguration configuration, IServiceCollection services)
         {
             var nhFactory = CreateNHFactory(configuration, "DefaultConnectionString");
@@ -48,12 +56,14 @@ namespace ArlequimPetShop.Infrastructure
             RegisterRepositories(services);
 
             RegisterBus(services);
-
             RegisterCommands(services);
             RegisterQueries(services);
             RegisterEvents(services);
         }
 
+        /// <summary>
+        /// Registra os serviços de aplicação e configurações de segurança e appSettings.
+        /// </summary>
         private static IServiceCollection RegisterServices(IConfiguration configuration, IServiceCollection services)
         {
             services.Configure<AppSettingsOptions>(configuration.GetSection("AppSettings"));
@@ -68,6 +78,9 @@ namespace ArlequimPetShop.Infrastructure
             return services;
         }
 
+        /// <summary>
+        /// Registra os repositórios de acesso a dados utilizados na aplicação.
+        /// </summary>
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddSingleton<IClientRepository, ClientNHRpository>();
@@ -76,6 +89,9 @@ namespace ArlequimPetShop.Infrastructure
             services.AddSingleton<IUserRepository, UserNHRpository>();
         }
 
+        /// <summary>
+        /// Registra o barramento de comunicação de comandos e queries.
+        /// </summary>
         private static void RegisterBus(IServiceCollection services)
         {
             services.AddBus(a =>
@@ -84,6 +100,9 @@ namespace ArlequimPetShop.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Registra os manipuladores de queries e associa as queries ao barramento.
+        /// </summary>
         private static void RegisterQueries(IServiceCollection services)
         {
             services.AddSingleton<ProductQueryHandler>();
@@ -110,6 +129,9 @@ namespace ArlequimPetShop.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Registra os manipuladores de comandos e associa os comandos ao barramento.
+        /// </summary>
         private static void RegisterCommands(IServiceCollection services)
         {
             services.AddSingleton<ProductCommandHandler>();
@@ -138,11 +160,20 @@ namespace ArlequimPetShop.Infrastructure
             });
         }
 
+        /// <summary>
+        /// (Reservado para futuro uso) Registra os eventos e seus manipuladores no barramento de eventos.
+        /// </summary>
         private static void RegisterEvents(IServiceCollection services)
         {
-
+            // Evento ainda não implementado
         }
 
+        /// <summary>
+        /// Cria e configura a fábrica de sessões do NHibernate com base na connection string fornecida.
+        /// </summary>
+        /// <param name="configuration">Configurações da aplicação.</param>
+        /// <param name="connectionStringName">Nome da connection string a ser usada.</param>
+        /// <returns>Instância de <see cref="ISessionFactory"/> pronta para uso.</returns>
         private static ISessionFactory CreateNHFactory(IConfiguration configuration, string connectionStringName)
         {
             var connection = configuration.ConnectionString(connectionStringName);

@@ -2,6 +2,7 @@
 using ArlequimPetShop.SharedKernel;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using SrShut.Common;
 using SrShut.Cqrs.Requests;
 using SrShut.Data;
 using System.Text;
