@@ -45,14 +45,15 @@ namespace ArlequimPetShop.Application.CommandHandlers
         public async Task HandleAsync(ProductCreateCommand command)
         {
             Throw.ArgumentIsNull(command);
-            Throw.IsTrue(await _productRepository.HasByNameOrDescription(command.Name, command.Description), "Product.HasByNameOrDescription", "Produto já cadastrado com esse nome ou descrição.");
+            Throw.IsTrue(await _productRepository.HasByBarcode(command.Barcode), "Product.HasByNameOrDescription", "Produto já cadastrado com esse código de barras.");
 
             using var scope = _uofwFactory.Get();
 
-            var product = new Product(Guid.NewGuid(), command.Barcode, command.Name, command.Description, command.Price, command.ExpirationDate);
+            var product = new Product(command.Id.Value, command.Barcode, command.Name, command.Description, command.Price, command.ExpirationDate);
             product.UpdateStock();
 
             await _productRepository.AddAsync(product);
+
             scope.Complete();
         }
 
@@ -69,7 +70,7 @@ namespace ArlequimPetShop.Application.CommandHandlers
             Throw.IsNull(product, "Product.NotFound", "Produto não encontrado");
 
             product.AddHistory(command.Name, command.Description, 0, null);
-            product.Update(command.Barcode, command.Name, command.Description, command.Price, command.ExpirationDate);
+            product.Update(command.Name, command.Description, command.Price, command.ExpirationDate);
 
             scope.Complete();
         }

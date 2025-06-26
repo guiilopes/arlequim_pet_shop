@@ -116,9 +116,8 @@ namespace ArlequimPetShop.Domain.Products
             UpdatedOn = DateTime.Now;
         }
 
-        public void Update(string? barcode, string? name, string? description, decimal? price, DateTime? expirationDate)
+        public void Update(string? name, string? description, decimal? price, DateTime? expirationDate)
         {
-            Barcode = barcode;
             Name = name;
             Description = description;
             Price = price;

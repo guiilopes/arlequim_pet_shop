@@ -11,7 +11,7 @@ namespace ArlequimPetShop.Infrastructure.Databases.Mappings
 
             Map(m => m.Description).Nullable();
             Map(m => m.Quantity).Not.Nullable();
-            Map(m => m.DocumentFiscalNumber).Not.Nullable();
+            Map(m => m.DocumentFiscalNumber).Nullable();
 
             Map(m => m.CreatedOn).Not.Nullable();
             Map(m => m.UpdatedOn).Not.Nullable();

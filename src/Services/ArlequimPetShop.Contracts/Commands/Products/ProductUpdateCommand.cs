@@ -17,12 +17,6 @@ namespace ArlequimPetShop.Contracts.Commands.Products
         public Guid? Id { get; set; }
 
         /// <summary>
-        /// Código de barras do produto.
-        /// </summary>
-        [Required(ErrorMessage = "O código de barras é obrigatório.")]
-        public string? Barcode { get; set; }
-
-        /// <summary>
         /// Nome do produto.
         /// </summary>
         [Required(ErrorMessage = "O nome do produto é obrigatório.")]

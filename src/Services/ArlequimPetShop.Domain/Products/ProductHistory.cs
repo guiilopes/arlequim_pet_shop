@@ -32,7 +32,6 @@ namespace ArlequimPetShop.Domain.Products
         [RequiredValidator(ErrorMessage = "Nome do produto obrigatório.")]
         public decimal? Quantity { get; set; }
 
-        [RequiredValidator(ErrorMessage = "Número da nota fiscal do produto obrigatório.")]
         public string? DocumentFiscalNumber { get; set; }
 
         [RequiredValidator(ErrorMessage = "Data de criação do histórico do produto obrigatória.")]

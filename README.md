@@ -277,7 +277,6 @@ public class SaleNHRpository : EventBusRepository<Sale>, ISaleRepository
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",  
-  "barcode": "7897348200994",
   "name": "RAÇÃO PREMIER CÃES ADULTOS PEQUENO PORTE SABOR FRANGO",
   "description": "RAÇÃO PREMIER FÓRMULA PARA CÃES ADULTOS DE RAÇAS PEQUENAS SABOR FRANGO",
   "price": 150.00,

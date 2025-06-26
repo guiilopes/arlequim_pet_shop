@@ -26,13 +26,12 @@ namespace ArlequimPetShop.Infrastructure.Databases.Repositories
             return query;
         }
 
-        public async Task<bool> HasByNameOrDescription(string name, string description)
+        public async Task<bool> HasByBarcode(string barcode)
         {
             using var unitOfWork = UnitOfWorkFactory.Get();
             var session = unitOfWork.Context;
             var query = await session.Query<Product>()
-                                     .Where(p => (p.Name == name
-                                                  || p.Description == description))
+                                     .Where(p => p.Barcode == barcode)
                                      .AnyAsync();
 
             return query;

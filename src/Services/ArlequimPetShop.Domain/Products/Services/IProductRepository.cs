@@ -6,6 +6,6 @@ namespace ArlequimPetShop.Domain.Products.Services
     {
         Task<Product> GetAsyncByBarcode(string? barcode);
 
-        Task<bool> HasByNameOrDescription(string name, string description);
+        Task<bool> HasByBarcode(string barcode);
     }
 }

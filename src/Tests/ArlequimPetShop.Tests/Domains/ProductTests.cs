@@ -65,9 +65,9 @@ namespace ArlequimPetShop.Tests.Domains
         public void Update_ShouldChangeProperties()
         {
             var product = new Product(Guid.NewGuid(), "123", "Ração", "Desc", 10m, DateTime.Today);
-            product.Update("321", "NovoNome", "NovaDesc", 15m, DateTime.Today.AddDays(5));
+            product.Update("NovoNome", "NovaDesc", 15m, DateTime.Today.AddDays(5));
 
-            Assert.AreEqual("321", product.Barcode);
+            Assert.AreEqual("123", product.Barcode);
             Assert.AreEqual("NovoNome", product.Name);
             Assert.AreEqual("NovaDesc", product.Description);
             Assert.AreEqual(15m, product.Price);
