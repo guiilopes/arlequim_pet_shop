@@ -494,4 +494,4 @@ barcode;name;description;price;quantity;expirationdate
 **Guilherme Henrique Busto Lopes**  
 📧 guii-lopes@hotmail.com  
 📍 Curitiba – PR  
-💼 Analista Desenvolvedor Sênior
+💼 Tech Lead e Analista Desenvolvedor Sênior .NET
