@@ -9,6 +9,9 @@ using SrShut.Data;
 
 namespace ArlequimPetShop.Application.CommandHandlers
 {
+    /// <summary>
+    /// Manipulador de comandos relacionados ao usuário: criação e login.
+    /// </summary>
     public class UserCommandHandler : ICommandHandler<UserCreateCommand>,
                                       ICommandHandler<UserLoginCommand>
     {
@@ -16,6 +19,9 @@ namespace ArlequimPetShop.Application.CommandHandlers
         private readonly IUnitOfWorkFactory _uofwFactory;
         private readonly string _secret;
 
+        /// <summary>
+        /// Construtor do handler com injeção de repositório, unit of work e chave secreta.
+        /// </summary>
         public UserCommandHandler(IUserRepository userRepository, IUnitOfWorkFactory uofwFactory, IOptions<ArlequimSecurityOptions> options)
         {
             Throw.ArgumentIsNull(userRepository);
@@ -27,6 +33,11 @@ namespace ArlequimPetShop.Application.CommandHandlers
             _secret = options.Value.Secret;
         }
 
+        /// <summary>
+        /// Manipula o comando de criação de novo usuário.
+        /// Verifica duplicidade por e-mail antes de persistir.
+        /// </summary>
+        /// <param name="command">Comando com dados do usuário a ser criado.</param>
         public async Task HandleAsync(UserCreateCommand command)
         {
             Throw.ArgumentIsNull(command);
@@ -37,10 +48,14 @@ namespace ArlequimPetShop.Application.CommandHandlers
             var user = new User(Guid.NewGuid(), command.Type, command.Name, command.Email, command.Password);
 
             await _userRepository.AddAsync(user);
-
             scope.Complete();
         }
 
+        /// <summary>
+        /// Manipula o comando de login de usuário.
+        /// Valida credenciais e gera token JWT.
+        /// </summary>
+        /// <param name="command">Comando com e-mail e senha.</param>
         public async Task HandleAsync(UserLoginCommand command)
         {
             Throw.ArgumentIsNull(command);

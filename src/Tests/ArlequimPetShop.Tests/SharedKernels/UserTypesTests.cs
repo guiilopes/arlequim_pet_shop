@@ -1,7 +1,7 @@
 ﻿using ArlequimPetShop.SharedKernel.Enums;
 using SrShut.Common;
 
-namespace ArlequimPetShop.Tests.SharedKernels.Enums
+namespace ArlequimPetShop.Tests.SharedKernels
 {
     /// <summary>
     /// Testes para o enum UserTypes.

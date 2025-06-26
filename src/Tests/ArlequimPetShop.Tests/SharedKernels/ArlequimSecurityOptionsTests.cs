@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace ArlequimPetShop.Tests.SharedKernels.Options
+namespace ArlequimPetShop.Tests.SharedKernels
 {
     /// <summary>
     /// Testes para a classe de configuração ArlequimSecurityOptions.

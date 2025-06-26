@@ -3,8 +3,14 @@ using FluentNHibernate.Mapping;
 
 namespace ArlequimPetShop.Infrastructure.Databases.Mappings
 {
+    /// <summary>
+    /// Mapeamento da entidade <see cref="User"/> para a tabela no banco de dados usando Fluent NHibernate.
+    /// </summary>
     public class UserMap : ClassMap<User>
     {
+        /// <summary>
+        /// Construtor responsável por configurar o mapeamento dos campos da entidade <see cref="User"/>.
+        /// </summary>
         public UserMap()
         {
             Id(m => m.Id).Not.Nullable();

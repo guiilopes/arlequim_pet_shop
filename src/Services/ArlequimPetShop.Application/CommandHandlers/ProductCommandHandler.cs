@@ -7,6 +7,11 @@ using SrShut.Data;
 
 namespace ArlequimPetShop.Application.CommandHandlers
 {
+    /// <summary>
+    /// Manipulador de comandos relacionados a produtos.
+    /// Responsável por orquestrar ações de criação, atualização, exclusão,
+    /// importação de estoque via planilha e importação via XML fiscal.
+    /// </summary>
     public class ProductCommandHandler : ICommandHandler<ProductCreateCommand>,
                                          ICommandHandler<ProductUpdateCommand>,
                                          ICommandHandler<ProductDeleteCommand>,
@@ -18,6 +23,9 @@ namespace ArlequimPetShop.Application.CommandHandlers
         private readonly IProductStockInventoryService _productStockInventoryService;
         private readonly IProductDocumentFiscalImportService _productDocumentFiscalImportService;
 
+        /// <summary>
+        /// Inicializa o manipulador com as dependências necessárias.
+        /// </summary>
         public ProductCommandHandler(IProductRepository productRepository, IUnitOfWorkFactory uofwFactory, IProductStockInventoryService productStockInventoryService, IProductDocumentFiscalImportService productDocumentFiscalImportService)
         {
             Throw.ArgumentIsNull(productRepository);
@@ -31,25 +39,9 @@ namespace ArlequimPetShop.Application.CommandHandlers
             _productDocumentFiscalImportService = productDocumentFiscalImportService;
         }
 
-        public async Task HandleAsync(ProductStockInventoryCommand command)
-        {
-            Throw.ArgumentIsNull(command);
-            Throw.IsNull(command.File, "ProductStockInventoryCommand.File", "Arquivo não encontrado.");
-
-            using var scope = _uofwFactory.Get();
-
-            var allowedExtensions = command.File.FileName.Contains(".csv");
-            Throw.IsFalse(allowedExtensions, "OperationStockImport.InvalidExtension", "Tipo de arquivo inválido.");
-
-            var stream = new MemoryStream();
-            await command.File.CopyToAsync(stream);
-            stream.Position = 0;
-
-            await _productStockInventoryService.Execute(stream, command.DocumentFiscalNumber);
-
-            scope.Complete();
-        }
-
+        /// <summary>
+        /// Manipula o comando de criação de produto.
+        /// </summary>
         public async Task HandleAsync(ProductCreateCommand command)
         {
             Throw.ArgumentIsNull(command);
@@ -58,14 +50,15 @@ namespace ArlequimPetShop.Application.CommandHandlers
             using var scope = _uofwFactory.Get();
 
             var product = new Product(Guid.NewGuid(), command.Barcode, command.Name, command.Description, command.Price, command.ExpirationDate);
-
             product.UpdateStock();
 
             await _productRepository.AddAsync(product);
-
             scope.Complete();
         }
 
+        /// <summary>
+        /// Manipula o comando de atualização de produto.
+        /// </summary>
         public async Task HandleAsync(ProductUpdateCommand command)
         {
             Throw.ArgumentIsNull(command);
@@ -81,6 +74,9 @@ namespace ArlequimPetShop.Application.CommandHandlers
             scope.Complete();
         }
 
+        /// <summary>
+        /// Manipula o comando de exclusão lógica de produto.
+        /// </summary>
         public async Task HandleAsync(ProductDeleteCommand command)
         {
             Throw.ArgumentIsNull(command);
@@ -91,10 +87,33 @@ namespace ArlequimPetShop.Application.CommandHandlers
             Throw.IsNull(product, "Product.NotFound", "Produto não encontrado");
 
             product.Delete();
-
             scope.Complete();
         }
 
+        /// <summary>
+        /// Manipula o comando de importação de estoque via planilha CSV.
+        /// </summary>
+        public async Task HandleAsync(ProductStockInventoryCommand command)
+        {
+            Throw.ArgumentIsNull(command);
+            Throw.IsNull(command.File, "ProductStockInventoryCommand.File", "Arquivo não encontrado.");
+
+            using var scope = _uofwFactory.Get();
+
+            var allowedExtensions = command.File.FileName.Contains(".csv");
+            Throw.IsFalse(allowedExtensions, "OperationStockImport.InvalidExtension", "Tipo de arquivo inválido.");
+
+            var stream = new MemoryStream();
+            await command.File.CopyToAsync(stream);
+            stream.Position = 0;
+
+            await _productStockInventoryService.Execute(stream);
+            scope.Complete();
+        }
+
+        /// <summary>
+        /// Manipula o comando de importação de produtos via XML de nota fiscal.
+        /// </summary>
         public async Task HandleAsync(ProductDocumentFiscalImportCommand command)
         {
             Throw.ArgumentIsNull(command);
@@ -110,7 +129,6 @@ namespace ArlequimPetShop.Application.CommandHandlers
             stream.Position = 0;
 
             await _productDocumentFiscalImportService.Execute(stream);
-
             scope.Complete();
         }
     }

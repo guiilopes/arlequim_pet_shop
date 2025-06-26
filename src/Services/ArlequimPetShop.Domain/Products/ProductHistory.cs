@@ -3,7 +3,11 @@
 namespace ArlequimPetShop.Domain.Products
 {
     public class ProductHistory
-    {
+    {      
+        /*Essa classe eu não quis fazer sumario, 
+          para mostrar como geralmente na camada de Domain 
+          eu gosto de deixar a classe, para não ficar muito poluida
+        */
         public ProductHistory()
         {
 

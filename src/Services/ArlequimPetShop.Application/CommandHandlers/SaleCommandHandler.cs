@@ -10,6 +10,9 @@ using SrShut.Data;
 
 namespace ArlequimPetShop.Application.CommandHandlers
 {
+    /// <summary>
+    /// Handler responsável por processar o comando de criação de uma venda.
+    /// </summary>
     public class SaleCommandHandler : ICommandHandler<SaleCreateCommand>
     {
         private readonly ISaleRepository _saleRepository;
@@ -17,6 +20,9 @@ namespace ArlequimPetShop.Application.CommandHandlers
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWorkFactory _uofwFactory;
 
+        /// <summary>
+        /// Construtor do <see cref="SaleCommandHandler"/> com injeção de dependências.
+        /// </summary>
         public SaleCommandHandler(IProductRepository productRepository, IUnitOfWorkFactory uofwFactory, ISaleRepository saleRepository, IClientRepository clientRepository)
         {
             Throw.ArgumentIsNull(saleRepository);
@@ -30,6 +36,11 @@ namespace ArlequimPetShop.Application.CommandHandlers
             _uofwFactory = uofwFactory;
         }
 
+        /// <summary>
+        /// Processa o comando de criação de uma venda.
+        /// Valida o cliente, estoque dos produtos e aplica os descontos e preços líquidos.
+        /// </summary>
+        /// <param name="command">Comando contendo os dados da venda.</param>
         public async Task HandleAsync(SaleCreateCommand command)
         {
             Throw.ArgumentIsNull(command);

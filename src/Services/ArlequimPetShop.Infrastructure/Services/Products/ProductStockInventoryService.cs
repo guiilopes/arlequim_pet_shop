@@ -19,7 +19,7 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
             _productRepository = productRepository;
         }
 
-        public async Task Execute(Stream stream, string documentFiscalNumber)
+        public async Task Execute(Stream stream)
         {
             Throw.ArgumentIsNull(stream);
 
@@ -48,7 +48,7 @@ namespace ArlequimPetShop.Infrastructure.Services.Products
                         await _productRepository.AddAsync(product);
                     }
 
-                    product.AddHistory(item.Name, item.Description, item.Quantity, documentFiscalNumber);
+                    product.AddHistory(item.Name, item.Description, item.Quantity, string.Empty);
                     product.UpdateStock(quantity);
 
                     await _productRepository.UpdateAsync(product);

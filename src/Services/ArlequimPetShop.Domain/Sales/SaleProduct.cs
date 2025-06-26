@@ -5,6 +5,10 @@ namespace ArlequimPetShop.Domain.Sales
 {
     public class SaleProduct
     {
+        /*Essa classe eu não quis fazer sumario, 
+          para mostrar como geralmente na camada de Domain 
+          eu gosto de deixar a classe, para não ficar muito poluida
+        */
         public SaleProduct()
         {
         }

@@ -4,7 +4,7 @@ using ArlequimPetShop.Infrastructure.Services.Products;
 using Moq;
 using System.Text;
 
-namespace ArlequimPetShop.Tests.Infrastructures.Services.Products
+namespace ArlequimPetShop.Tests.Infrastructures
 {
     /// <summary>
     /// Testes para o serviço de importação de inventário de estoque de produtos via CSV.
@@ -31,7 +31,6 @@ namespace ArlequimPetShop.Tests.Infrastructures.Services.Products
         [Test]
         public async Task Execute_ShouldImportCsvAndUpdateRepository()
         {
-            const string documentFiscalNumber = "123";
             const string csvContent = "barcode;name;description;price;quantity;expirationdate\n" +
                                       "7891234567890;Produto Teste;Descrição;10.5;2;2025-12-31";
 
@@ -40,7 +39,7 @@ namespace ArlequimPetShop.Tests.Infrastructures.Services.Products
             _productRepositoryMock?.Setup(r => r.GetAsyncByBarcode("7891234567890"))
                                    .ReturnsAsync((Product)null!); 
 
-            await _service?.Execute(stream, documentFiscalNumber)!;
+            await _service?.Execute(stream)!;
 
             _productRepositoryMock?.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Once);
             _productRepositoryMock?.Verify(r => r.UpdateAsync(It.IsAny<Product>()), Times.Once);

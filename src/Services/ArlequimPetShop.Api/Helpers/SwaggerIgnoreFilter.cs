@@ -5,8 +5,16 @@ using System.Reflection;
 
 namespace ArlequimPetShop.Api.Helpers
 {
+    /// <summary>
+    /// Filtro para remover propriedades do schema Swagger que estejam marcadas com o atributo <see cref="IgnoreAttribute"/>.
+    /// </summary>
     public class SwaggerIgnoreFilter : ISchemaFilter
     {
+        /// <summary>
+        /// Aplica o filtro ao schema, removendo campos marcados com o atributo <see cref="IgnoreAttribute"/>.
+        /// </summary>
+        /// <param name="schema">Esquema OpenAPI a ser modificado.</param>
+        /// <param name="schemaFilterContext">Contexto do schema atual sendo gerado.</param>
         public void Apply(OpenApiSchema schema, SchemaFilterContext schemaFilterContext)
         {
             if (schema.Properties.Count == 0)
@@ -16,19 +24,19 @@ namespace ArlequimPetShop.Api.Helpers
                                               BindingFlags.NonPublic |
                                               BindingFlags.Instance;
 
-            var memberList = schemaFilterContext.Type // In v5.3.3+ use Type instead
-                                .GetFields(bindingFlags).Cast<MemberInfo>()
-                                .Concat(schemaFilterContext.Type // In v5.3.3+ use Type instead
-                                .GetProperties(bindingFlags));
+            // Coleta membros (fields e properties) com os atributos definidos
+            var memberList = schemaFilterContext.Type
+                .GetFields(bindingFlags).Cast<MemberInfo>()
+                .Concat(schemaFilterContext.Type.GetProperties(bindingFlags));
 
-            var excludedList = memberList.Where(m =>
-                                                m.GetCustomAttribute<IgnoreAttribute>()
-                                                != null)
-                                         .Select(m =>
-                                             (m.GetCustomAttribute<JsonPropertyAttribute>()
-                                              ?.PropertyName
-                                              ?? m.Name.ToCamelCase()));
+            // Seleciona nomes das propriedades com [Ignore]
+            var excludedList = memberList
+                .Where(m => m.GetCustomAttribute<IgnoreAttribute>() != null)
+                .Select(m =>
+                    m.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName
+                    ?? m.Name.ToCamelCase());
 
+            // Remove do schema
             foreach (var excludedName in excludedList)
             {
                 if (schema.Properties.ContainsKey(excludedName))
@@ -37,8 +45,16 @@ namespace ArlequimPetShop.Api.Helpers
         }
     }
 
+    /// <summary>
+    /// Extensão auxiliar para converter nomes em camelCase, compatível com convenções Swagger e JSON.
+    /// </summary>
     internal static class StringExtensions
     {
+        /// <summary>
+        /// Converte a primeira letra da string para minúscula (camelCase).
+        /// </summary>
+        /// <param name="value">Texto a ser convertido.</param>
+        /// <returns>Texto em camelCase.</returns>
         internal static string ToCamelCase(this string value)
         {
             if (string.IsNullOrEmpty(value)) return value;
@@ -46,6 +62,9 @@ namespace ArlequimPetShop.Api.Helpers
         }
     }
 
+    /// <summary>
+    /// Atributo para indicar que um campo ou propriedade deve ser ignorado na geração do Swagger.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     internal class IgnoreAttribute : Attribute
     {

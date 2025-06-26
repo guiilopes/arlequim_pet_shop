@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace ArlequimPetShop.Tests.Infrastructures.Services.Products;
+namespace ArlequimPetShop.Tests.Infrastructures;
 
 /// <summary>
 /// Testes para o serviço de importação fiscal de produtos a partir de XML da NF-e.
